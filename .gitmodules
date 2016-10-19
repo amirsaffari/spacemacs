@@ -1,0 +1,6 @@
+[submodule "personal/virtualenvwrapper.el"]
+	path = personal/virtualenvwrapper
+	url = git@github.com:porterjamesj/virtualenvwrapper.el.git
+[submodule "personal/emacs-color-theme-solarized"]
+	path = personal/emacs-color-theme-solarized
+	url = git@github.com:sellout/emacs-color-theme-solarized.git
