@@ -51,6 +51,7 @@ values."
      version-control
      python
      html
+     javascript
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -130,16 +131,18 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(solarized-light
+   dotspacemacs-themes '(
+                         solarized-light
                          solarized-dark
                          spacemacs-dark
-                         spacemacs-light)
+                         spacemacs-light
+                         )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Fantasque Sans Mono"
-                               :size 17
+                               :size 16
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -368,9 +371,11 @@ you should place your code here."
   (setq inhibit-startup-message t)
   (mouse-avoidance-mode 'cat-and-mouse)
 
-  (add-to-list 'custom-theme-load-path "~/.emacs.d/personal/emacs-color-theme-solarized")
-  (load-theme 'solarized t)
-  (set-frame-parameter nil 'background-mode 'light)
+  ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/personal/emacs-color-theme-solarized")
+  ;; (load-theme 'solarized t)
+  ;; (set-frame-parameter nil 'background-mode 'light)
+
+  (add-to-list 'custom-theme-load-path "~/.emacs.d/personal/solarized-emacs")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
