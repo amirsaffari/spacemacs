@@ -136,6 +136,7 @@ values."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
                          moe-dark
+                         monokai
                          zenburn
                          solarized-light
                          solarized-dark
