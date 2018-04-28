@@ -1,6 +1,3 @@
 [submodule "personal/virtualenvwrapper.el"]
 	path = personal/virtualenvwrapper
 	url = git@github.com:porterjamesj/virtualenvwrapper.el.git
-[submodule "personal/solarized-emacs"]
-	path = personal/solarized-emacs
-	url = https://github.com/bbatsov/solarized-emacs.git
