@@ -140,10 +140,10 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
-                         zenburn
-                         solarized-light
-                         solarized-dark
                          atom-one-dark
+                         solarized-light
+                         zenburn
+                         solarized-dark
                          spacemacs-dark
                          spacemacs-light
                          )
@@ -151,8 +151,8 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Monaco"
-                               :size 14
+   dotspacemacs-default-font '("Fantasque Sans Mono"
+                               :size 16
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -345,8 +345,8 @@ you should place your code here."
   (setq-default dotspacemacs-configuration-layers
                 '((c-c++ :variables c-c++-enable-clang-support t)))
 
-  ((c++-mode (helm-make-build-dir . "")))
-  (put 'helm-make-build-dir 'safe-local-variable 'stringp)
+  ;; ((c++-mode (helm-make-build-dir . "")))
+  ;; (put 'helm-make-build-dir 'safe-local-variable 'stringp)
 
   ;; Bind clang-format-region to C-M-tab in all modes:
   (global-set-key [C-M-tab] 'clang-format-region)
