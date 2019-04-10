@@ -1,6 +1,6 @@
 ;;; config.el --- OSX Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2018 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -16,7 +16,7 @@
         launchctl
         (osx-dictionary :toggle osx-use-dictionary-app)
         osx-trash
-        pbcopy
+        osx-clipboard
         reveal-in-osx-finder
         term
         ))
@@ -103,10 +103,21 @@
              (not (boundp 'mac-system-move-file-to-trash-use-finder)))
     :init (osx-trash-setup)))
 
-(defun osx/init-pbcopy ()
-  (use-package pbcopy
-    :if (and (spacemacs/system-is-mac) (not (display-graphic-p)))
-    :init (turn-on-pbcopy)))
+(defun osx/init-osx-clipboard ()
+  (use-package osx-clipboard
+    :if (spacemacs/system-is-mac)
+    :commands
+    (osx-clipboard-paste-function osx-clipboard-cut-function)
+    :init
+    (progn
+      (setq interprogram-cut-function '(lambda (text &rest ignore)
+                                        (if (display-graphic-p)
+                                            (gui-select-text text)
+                                          (osx-clipboard-cut-function text)))
+            interprogram-paste-function '(lambda ()
+                                          (if (display-graphic-p)
+                                              (gui-selection-value)
+                                            (osx-clipboard-paste-function)))))))
 
 (defun osx/init-reveal-in-osx-finder ()
   (use-package reveal-in-osx-finder
