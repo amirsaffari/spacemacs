@@ -1,3 +1,6 @@
 [submodule "personal/virtualenvwrapper.el"]
 	path = personal/virtualenvwrapper
 	url = git@github.com:porterjamesj/virtualenvwrapper.el.git
+[submodule "layers/trello-org-spacemacs-layer"]
+	path = layers/trello-org-spacemacs-layer
+	url = https://github.com/maxrp/trello-org-spacemacs-layer.git
