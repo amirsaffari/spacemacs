@@ -11,10 +11,13 @@
 
 (defconst lsp-packages
   '(
-     lsp-mode
-     lsp-ui
-     (company-lsp :requires company)
-     ))
+    (lsp-mode :requires yasnippet)
+    lsp-ui
+    (company-lsp :requires company)
+    (helm-lsp :requires helm)
+    (lsp-treemacs :requires treemacs)
+    popwin
+    ))
 
 (defun lsp/init-lsp-mode ()
   (use-package lsp-mode
@@ -48,3 +51,13 @@
 
 (defun lsp/init-company-lsp ()
   (use-package company-lsp :defer t))
+
+(defun lsp/init-helm-lsp ()
+  (use-package helm-lsp :defer t))
+
+(defun lsp/init-lsp-treemacs ()
+  (use-package lsp-treemacs :defer t))
+
+(defun lsp/post-init-popwin ()
+  (push '("*lsp-help*" :dedicated t :position bottom :stick t :noselect t :height 0.4)
+        popwin:special-display-config))

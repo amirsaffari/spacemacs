@@ -12,18 +12,37 @@
 
 ;; backend
 
+(defun spacemacs//javascript-backend ()
+  "Returns selected backend."
+  (if javascript-backend
+      javascript-backend
+    (cond
+     ((configuration-layer/layer-used-p 'lsp) 'lsp)
+     (t 'tern))))
+
 (defun spacemacs//javascript-setup-backend ()
   "Conditionally setup javascript backend."
-  (pcase javascript-backend
+  (pcase (spacemacs//javascript-backend)
     (`tern (spacemacs//javascript-setup-tern))
     (`lsp (spacemacs//javascript-setup-lsp))))
 
 (defun spacemacs//javascript-setup-company ()
   "Conditionally setup company based on backend."
-  (pcase javascript-backend
+  (pcase (spacemacs//javascript-backend)
     (`tern (spacemacs//javascript-setup-tern-company))
     (`lsp (spacemacs//javascript-setup-lsp-company))))
 
+(defun spacemacs//javascript-setup-dap ()
+  "Conditionally setup elixir DAP integration."
+  ;; currently DAP is only available using LSP
+  (pcase (spacemacs//javascript-backend)
+    (`lsp (spacemacs//javascript-setup-lsp-dap))))
+
+(defun spacemacs//javascript-setup-next-error-fn ()
+  "If the `syntax-checking' layer is enabled, then disable `js2-mode''s
+`next-error-function', and let `flycheck' handle any errors."
+  (when (configuration-layer/layer-used-p 'syntax-checking)
+    (setq-local next-error-function nil)))
 
 ;; lsp
 
@@ -31,6 +50,8 @@
   "Setup lsp backend."
   (if (configuration-layer/layer-used-p 'lsp)
       (progn
+        (when (not javascript-lsp-linter)
+          (setq-local lsp-prefer-flymake :none))
         (lsp))
     (message (concat "`lsp' layer is not installed, "
                      "please add `lsp' layer to your dotfile."))))
@@ -44,10 +65,14 @@
           :modes js2-mode
           :append-hooks nil
           :call-hooks t)
-        (company-mode)
-        (fix-lsp-company-prefix))
+        (company-mode))
     (message (concat "`lsp' layer is not installed, "
                      "please add `lsp' layer to your dotfile."))))
+
+(defun spacemacs//javascript-setup-lsp-dap ()
+  "Setup DAP integration."
+  (require 'dap-firefox)
+  (require 'dap-chrome))
 
 
 ;; tern
@@ -64,31 +89,6 @@
         (spacemacs/tern-setup-tern-company 'js2-mode))
     (message (concat "Tern was configured as the javascript backend but "
                      "the `tern' layer is not present in your `.spacemacs'!"))))
-
-
-;; import-js
-
-(defun spacemacs/import-js-set-key-bindings (mode)
-  "Setup the key bindings for `import-js' for the given MODE."
-  (spacemacs/declare-prefix-for-mode mode "mi" "import")
-  (spacemacs/set-leader-keys-for-major-mode mode
-    "if" #'spacemacs/import-js-fix
-    "ii" #'spacemacs/import-js-import
-    "gi" #'import-js-goto))
-
-(defun spacemacs/import-js-fix ()
-  (interactive)
-  (require 'import-js)
-  (import-js-fix)
-  (if (bound-and-true-p flycheck-mode)
-      (flycheck-buffer)))
-
-(defun spacemacs/import-js-import ()
-  (interactive)
-  (require 'import-js)
-  (import-js-import)
-  (if (bound-and-true-p flycheck-mode)
-      (flycheck-buffer)))
 
 
 ;; js-doc
@@ -149,3 +149,25 @@
   (spacemacs/skewer-eval-region beg end)
   (skewer-repl)
   (evil-insert-state))
+
+
+;; Others
+
+(defun spacemacs//javascript-setup-checkers ()
+  (when-let* ((found (executable-find "eslint_d")))
+    (set (make-local-variable 'flycheck-javascript-eslint-executable) found)))
+
+(defun spacemacs/javascript-format ()
+  "Call formatting tool specified in `javascript-fmt-tool'."
+  (interactive)
+  (cond
+   ((eq javascript-fmt-tool 'prettier)
+    (call-interactively 'prettier-js))
+   ((eq javascript-fmt-tool 'web-beautify)
+    (call-interactively 'web-beautify-js))
+   (t (error (concat "%s isn't valid javascript-fmt-tool value."
+                     " It should be 'web-beutify or 'prettier.")
+                     (symbol-name javascript-fmt-tool)))))
+
+(defun spacemacs/javascript-fmt-before-save-hook ()
+  (add-hook 'before-save-hook 'spacemacs/javascript-format t t))
