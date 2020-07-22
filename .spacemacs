@@ -59,7 +59,6 @@ values."
      c-c++
      latex
      bibtex
-     ruby
      csv
      )
    ;; List of additional packages that will be installed without being
