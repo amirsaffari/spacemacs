@@ -37,6 +37,7 @@ values."
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ivy
+     vim-powerline
      auto-completion
      better-defaults
      emacs-lisp
@@ -44,6 +45,7 @@ values."
      markdown
      org
      syntax-checking
+     spell-checking
      version-control
      python
      ipython-notebook
@@ -113,7 +115,7 @@ values."
    ;; with `:variables' keyword (similar to layers). Check the editing styles
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
-   dotspacemacs-editing-style 'emacs
+   dotspacemacs-editing-style 'vim
    ;; If non nil output loading progress in `*Messages*' buffer. (default nil)
    dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
@@ -332,6 +334,15 @@ you should place your code here."
   (setq venv-location "/home/amir/projects/py_envs/")
   ;; ====== Python =======
 
+  ;; ====== Yasnippet =======
+  (setq-default dotspacemacs-configuration-layers
+                '((auto-completion :variables
+                                   auto-completion-enable-snippets-in-popup t)))
+  (setq-default dotspacemacs-configuration-layers
+                '((auto-completion :variables
+                                   auto-completion-enable-help-tooltip t)))
+  ;; ====== Yasnippet =======
+
   ;; ====== JS ======
   (setq-default js2-basic-offset 2)
   (setq-default js-indent-level 2)
@@ -355,12 +366,13 @@ you should place your code here."
 
   ;; ====== Latex ======
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-  dotspacemacs-configuration-layers '(
-                                      (latex :variables latex-build-command "LaTeX"))
-  dotspacemacs-configuration-layers '(
-                                      (latex :variables latex-enable-auto-fill t))
-  dotspacemacs-configuration-layers '(
-                                      (latex :variables latex-enable-folding t))
+  dotspacemacs-configuration-layers '((latex :variables latex-build-command "LaTeX"))
+  dotspacemacs-configuration-layers '((latex :variables latex-enable-auto-fill t))
+  dotspacemacs-configuration-layers '((latex :variables latex-enable-folding t))
+
+  ;; ====== Spelling ======
+  (setq-default dotspacemacs-configuration-layers
+                '((spell-checking :variables spell-checking-enable-by-default nil)))
 
   ;; ====== Tidal =======
   (require 'tidal)
@@ -389,19 +401,22 @@ you should place your code here."
   (setq flycheck-flake8-maximum-line-length 120)
 
   ;; ========== Some key-bindings
-  (global-set-key "\C-x\C-m" 'execute-extended-command)
-  (global-set-key "\C-c\C-m" 'execute-extended-command)
+  ;; (global-set-key "\C-x\C-m" 'execute-extended-command)
+  ;; (global-set-key "\C-c\C-m" 'execute-extended-command)
 
-  (global-set-key "\C-w" 'backward-kill-word)
-  (global-set-key "\C-x\C-k" 'kill-region)
-  (global-set-key "\C-c\C-k" 'kill-region)
-  (global-set-key "\C-c\C-a" 'mark-whole-buffer)
+  ;; (global-set-key "\C-w" 'backward-kill-word)
+  ;; (global-set-key "\C-x\C-k" 'kill-region)
+  ;; (global-set-key "\C-c\C-k" 'kill-region)
+  ;; (global-set-key "\C-c\C-a" 'mark-whole-buffer)
+  (spacemacs/set-leader-keys "ok" 'kill-region)
 
-  (global-set-key (kbd "\C-x\C-e") 'comment-dwim)
-  (global-set-key (kbd "\C-c\C-e") 'comment-dwim)
+  ;; (global-set-key (kbd "\C-x\C-e") 'comment-dwim)
+  ;; (global-set-key (kbd "\C-c\C-e") 'comment-dwim)
+  (spacemacs/set-leader-keys "oe" 'comment-dwim)
 
-  (global-set-key [C-return]         'dabbrev-expand)
-  (define-key esc-map [C-return]     'dabbrev-completion)
+  ;; (global-set-key [C-return]         'dabbrev-expand)
+  ;; (define-key esc-map [C-return]     'dabbrev-completion)
+  (spacemacs/set-leader-keys "oc" 'dabbrev-expand)
 
   ;; ========= Some UI modifications
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
