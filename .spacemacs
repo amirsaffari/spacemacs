@@ -430,6 +430,16 @@ you should place your code here."
   ;; (define-key esc-map [C-return]     'dabbrev-completion)
   (spacemacs/set-leader-keys "oc" 'dabbrev-expand)
 
+  (define-key evil-normal-state-map "L" 'evil-end-of-line)
+  ;; (define-key evil-insert-state-map "L" 'end-of-line)
+  (define-key evil-visual-state-map "L" 'evil-end-of-line)
+  (define-key evil-motion-state-map "L" 'evil-end-of-line)
+
+  (define-key evil-normal-state-map "H" 'evil-beginning-of-line)
+  ;; (define-key evil-insert-state-map "H" 'beginning-of-line)
+  (define-key evil-visual-state-map "H" 'evil-beginning-of-line)
+  (define-key evil-motion-state-map "H" 'evil-beginning-of-line)
+
   ;; ========= Some UI modifications
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
