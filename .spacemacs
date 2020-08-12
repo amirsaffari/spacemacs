@@ -141,6 +141,7 @@ values."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
                          doom-one
+                         highlight-indent-guides
                          )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
@@ -334,6 +335,11 @@ you should place your code here."
   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
   ;; may have their own settings.
   (load-theme 'doom-solarized-light t)
+
+  ;; ====== highlight indentation
+  (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-responsive 'top)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
   ;; ====== Python =======
   (load "cython-mode")
