@@ -419,9 +419,9 @@ you should place your code here."
   (setq make-backup-files nil)
 
   ;; ========== Set the fill column ==========
-  (setq-default fill-column 120)
-  (setq whitespace-line-column 120) ;; limit line length
-  (setq flycheck-flake8-maximum-line-length 120)
+  (setq-default fill-column 150)
+  (setq whitespace-line-column 150) ;; limit line length
+  (setq flycheck-flake8-maximum-line-length 150)
 
   ;; ========== Some key-bindings
   (global-set-key "\C-x\C-m" 'execute-extended-command)
