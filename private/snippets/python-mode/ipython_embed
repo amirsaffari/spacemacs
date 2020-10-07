@@ -2,7 +2,5 @@
 # name: IPython Embed
 # key: IPy
 # --
-import sys
-from IPython import embed
-embed(colors='neutral', module=sys.modules['__main__'], user_ns=locals())
+from IPython import embed; embed(colors='neutral')
 0/0
