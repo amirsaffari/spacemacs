@@ -316,6 +316,9 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  ;; ====== Avoid yank on mouse-click
+  (add-hook 'spacemacs-buffer-mode-hook (lambda ()
+                                          (set (make-local-variable 'mouse-1-click-follows-link) nil)))
    ;; ====== Set path
   (add-to-list 'load-path "~/.emacs.d/personal")
   (progn (cd "~/.emacs.d/personal")
