@@ -27,7 +27,6 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'ht)
 (require 'helm)
 (require 'helm-command)
 (require 'core-configuration-layer)
@@ -43,7 +42,7 @@
 
 (defun helm-spacemacs-help//init (&optional arg)
   (when (or arg (null helm-spacemacs--initialized))
-    (configuration-layer/make-all-packages)
+    (configuration-layer/make-all-packages nil t)
     (setq helm-spacemacs--initialized t)))
 
 ;;;###autoload
@@ -118,7 +117,7 @@
         (push filename result)))
 
     ;; CONTRIBUTING.org is a special case as it should be at the root of the
-    ;; repository to be linked as the contributing guide on Github.
+    ;; repository to be linked as the contributing guide on GitHub.
     (push "CONTRIBUTING.org" result)
 
     ;; delete DOCUMENTATION.org to make it the first guide
@@ -153,7 +152,7 @@
   (let ((file (if (string= candidate "CONTRIBUTING.org")
                   ;; CONTRIBUTING.org is a special case as it should be at the
                   ;; root of the repository to be linked as the contributing
-                  ;; guide on Github.
+                  ;; guide on GitHub.
                   (concat spacemacs-start-directory candidate)
                 (concat spacemacs-docs-directory candidate))))
     (cond ((and (equal (file-name-extension file) "md")
@@ -171,48 +170,48 @@
 
 (defun helm-spacemacs-help//layer-source ()
   "Construct the helm source for the layer section."
-  `((name . "Layers")
-    (candidates . ,(sort (configuration-layer/get-layers-list) 'string<))
-    (candidate-number-limit)
-    (keymap . ,helm-spacemacs-help--layer-map)
-    (action . (("Open README.org"
-                . helm-spacemacs-help//layer-action-open-readme)
-               ("Open packages.el"
-                . helm-spacemacs-help//layer-action-open-packages)
-               ("Open config.el"
-                . helm-spacemacs-help//layer-action-open-config)
-               ("Open funcs.el"
-                . helm-spacemacs-help//layer-action-open-funcs)
-               ("Open layers.el"
-                . helm-spacemacs-help//layer-action-open-layers)
-               ("Install Layer"
-                . helm-spacemacs-help//layer-action-install-layer)
-               ("Open README.org (for editing)"
-                . helm-spacemacs-help//layer-action-open-readme-edit)))))
+  (helm-build-sync-source "Layers"
+    :candidates (sort (configuration-layer/get-layers-list) 'string<)
+    :candidate-number-limit 99999999
+    :keymap helm-spacemacs-help--layer-map
+    :action '(("Open README.org"
+               . helm-spacemacs-help//layer-action-open-readme)
+              ("Open packages.el"
+               . helm-spacemacs-help//layer-action-open-packages)
+              ("Open config.el"
+               . helm-spacemacs-help//layer-action-open-config)
+              ("Open funcs.el"
+               . helm-spacemacs-help//layer-action-open-funcs)
+              ("Open layers.el"
+               . helm-spacemacs-help//layer-action-open-layers)
+              ("Install Layer"
+               . helm-spacemacs-help//layer-action-install-layer)
+              ("Open README.org (for editing)"
+               . helm-spacemacs-help//layer-action-open-readme-edit))))
 
 (defvar helm-spacemacs-help--layer-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map helm-map)
-    (define-key map (kbd "<S-return>") '(lambda () (interactive)
-                                          ;; Add Layer
-                                          (helm-select-nth-action 3)))
-    (define-key map (kbd "<M-return>") '(lambda () (interactive)
-                                          ;; Open packages.el
-                                          (helm-select-nth-action 1)))
+    (define-key map (kbd "<S-return>") (lambda ()
+                                         "Install a layer, the current Helm candidate."
+                                         (interactive) (helm-select-nth-action 5)))
+    (define-key map (kbd "<M-return>") (lambda ()
+                                         "Open the `packages.el' file of a layer, the current Helm candidate."
+                                         (interactive) (helm-select-nth-action 1)))
     map)
   "Keymap for Spacemacs Layers sources")
 
 (defun helm-spacemacs-help//package-source ()
-  "Construct the helm source for the packages."
-  `((name . "Packages")
-    (candidates . ,(helm-spacemacs-help//package-candidates))
-    (candidate-number-limit)
-    (action . (("Go to configuration function"
-                . helm-spacemacs-help//package-action-goto-config-func)
-               ("Describe"
-                . helm-spacemacs-help//package-action-describe)
-               ("Recompile"
-                . helm-spacemacs-help//package-action-recompile)))))
+  (helm-build-sync-source "Packages"
+    :candidates (helm-spacemacs-help//package-candidates)
+    :candidate-number-limit 99999999
+    :action '(("Go to configuration function"
+               . helm-spacemacs-help//package-action-goto-config-func)
+              ("Describe"
+               . helm-spacemacs-help//package-action-describe)
+              ("Recompile"
+               . helm-spacemacs-help//package-action-recompile))))
+
 
 (defun helm-spacemacs-help//package-candidates ()
   "Return the sorted candidates for package source."
@@ -280,10 +279,10 @@
     result))
 
 (defun helm-spacemacs-help//dotspacemacs-source ()
-  `((name . "Dotfile")
-    (candidates . ,(helm-spacemacs-help//dotspacemacs-candidates))
-    (candidate-number-limit)
-    (action . (("Go to variable" . helm-spacemacs-help//go-to-dotfile-variable)))))
+  (helm-build-sync-source "Dotfile"
+    :candidates (helm-spacemacs-help//dotspacemacs-candidates)
+    :candidate-number-limit 99999999
+    :action '(("Go to variable" . helm-spacemacs-help//go-to-dotfile-variable))))
 
 (defun helm-spacemacs-help//dotspacemacs-candidates ()
   "Return the sorted candidates for all the dospacemacs variables."

@@ -21,8 +21,10 @@
 .trello
 /.cask/
 /.my-keybindings.el.swp
+/devdocs
 /eww-bookmarks
 /history
+/image-dired
 /network-security.data
 /recentf
 /session.*
@@ -37,6 +39,7 @@ eclipse.jdt.ls
 edts/
 elnode/
 elpa/
+EmmyLua-LS-all.jar
 eproject.lst
 eshell/alias
 eshell/history
@@ -53,6 +56,7 @@ projectile-bookmarks.eld
 projectile.cache
 python-*-docs-html
 quickurls
+racket-mode/
 semanticdb/
 server/
 tmp/
@@ -89,3 +93,6 @@ tags
 .tags
 !tags/
 gtags.files
+eln-cache/
+meghanada/
+vimish-fold/
