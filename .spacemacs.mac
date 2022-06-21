@@ -605,8 +605,9 @@ before packages are loaded."
 
   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
   ;; may have their own settings.
-  ;; (load-theme 'doom-solarized-light t)
-  (load-theme 'doom-one t)
+  ;; (load-theme 'doom-solarized-dark t)
+  ;; (load-theme 'doom-one t)
+  (load-theme 'doom-peacock t)
 
   ;; ====== highlight indentation
   (setq highlight-indent-guides-method 'character)
@@ -675,6 +676,9 @@ before packages are loaded."
 
   ;; ====== Set temporary directory
   (setq temporary-file-directory "~/.emacs.d/tmp/")
+
+  ;; Prevent undo tree files from polluting your git repo
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/tmp/")))
 
   ;; ===== Set standard indent to 4 ====
   (setq-default indent-tabs-mode nil)
