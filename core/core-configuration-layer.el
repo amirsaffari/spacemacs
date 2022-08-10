@@ -452,7 +452,9 @@ cache folder.")
         quelpa-build-dir (expand-file-name "build" quelpa-dir)
         quelpa-persistent-cache-file (expand-file-name "cache" quelpa-dir)
         quelpa-update-melpa-p nil)
-  (require 'quelpa))
+  (require 'quelpa)
+  (when (eq (quelpa--tar-type) 'gnu)
+    (setq quelpa-build-explicit-tar-format-p t)))
 
 (defun configuration-layer//make-quelpa-recipe (pkg)
   "Read recipe in PKG if :fetcher is local, then turn it to a correct file recepe.
@@ -661,7 +663,7 @@ To prevent package from being installed or uninstalled set the variable
                        (list layer))
                       (dolist (pkg pkgs)
                         (let ((pkg-name (if (listp pkg) (car pkg) pkg)))
-                          (add-to-list 'all-other-packages pkg-name))))))
+                          (cl-pushnew pkg-name all-other-packages))))))
                 (configuration-layer//filter-distant-packages
                  all-other-packages nil))))))
       (configuration-layer//install-packages packages)
@@ -1597,7 +1599,7 @@ RNAME is the name symbol of another existing layer."
          lname))
       (when (null rlayer)
         (configuration-layer//warning
-         "Unknown layer %s to declare lshadow relationship."
+         "Unknown layer %s to declare rshadow relationship."
          rname)))))
 
 (defun configuration-layer//set-layers-variables (layer-names)
@@ -1887,7 +1889,7 @@ RNAME is the name symbol of another existing layer."
             (when install-deps
               (setq result (append install-deps result))))
           (when (funcall filter pkg-name)
-            (add-to-list 'result pkg-name t))))
+            (cl-pushnew pkg-name result))))
       (delete-dups result))))
 
 (defun configuration-layer//filter-packages-with-deps
@@ -2327,7 +2329,7 @@ depends on it."
           (let* ((dep-sym (car dep))
                  (value (spacemacs-ht-get result dep-sym)))
             (puthash dep-sym
-                     (if value (add-to-list 'value pkg-sym) (list pkg-sym))
+                     (if value (cl-pushnew pkg-sym value) (list pkg-sym))
                      result)))))
     result))
 
@@ -2337,7 +2339,7 @@ depends on it."
     (dolist (pkg package-alist)
       (let ((pkg-sym (car pkg)))
         (unless (memq pkg-sym packages)
-          (add-to-list 'imp-pkgs pkg-sym))))
+          (cl-pushnew pkg-sym imp-pkgs))))
     imp-pkgs))
 
 (defun configuration-layer//get-orphan-packages
@@ -2347,7 +2349,7 @@ depends on it."
     (dolist (imp-pkg implicit-pkgs)
       (when (configuration-layer//is-package-orphan
              imp-pkg dist-pkgs dependencies)
-        (add-to-list 'result imp-pkg)))
+        (cl-pushnew imp-pkg result)))
     result))
 
 (defun configuration-layer//is-package-orphan (pkg-name dist-pkgs dependencies)
@@ -2555,7 +2557,7 @@ depends on it."
                                   (assq x package-archive-contents)))))
           (dolist (pkg (cons pkg-sym elpa-deps))
             ;; avoid duplicates
-            (add-to-list 'result pkg)))))
+            (cl-pushnew pkg result)))))
     result))
 
 (defun configuration-layer//create-archive-contents-item (pkg-name)
