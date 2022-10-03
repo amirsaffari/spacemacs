@@ -198,6 +198,18 @@ in `dotspacemacs-themes'.")
            (const hybrid) (cons symbol sexp))
   'spacemacs-dotspacemacs-init)
 
+(defun spacemacs//support-evilified-buffer-p ()
+  "Returns non-nil if buffers should use evilified states."
+  (or (eq dotspacemacs-editing-style 'vim)
+      (and (eq dotspacemacs-editing-style 'hybrid)
+           hybrid-style-enable-evilified-state)))
+
+(defun spacemacs//support-hjkl-navigation-p ()
+  "Returns non-nil if navigation keys should be evilified."
+  (or (eq dotspacemacs-editing-style 'vim)
+      (and (eq dotspacemacs-editing-style 'hybrid)
+           hybrid-style-enable-hjkl-bindings)))
+
 (spacemacs|defc dotspacemacs-startup-banner 'official
   "Specify the startup banner. Default value is `official', it displays
 the official spacemacs logo. An integer value is the index of text
@@ -1183,8 +1195,7 @@ error recovery."
     "is one of \'all, \'any, \'current or nil")
    (spacemacs//test-list
     (lambda (x)
-      (let ((el (or (car-safe x) x))
-            (list-size (cdr-safe x)))
+      (let ((el (or (car-safe x) x)))
         (member el '(recents recents-by-project bookmarks projects todos agenda))))
     'dotspacemacs-startup-lists (concat "includes \'recents, 'recents-by-project, "
                                         "\'bookmarks, \'todos, "
