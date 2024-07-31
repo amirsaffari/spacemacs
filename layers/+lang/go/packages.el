@@ -1,6 +1,6 @@
 ;;; packages.el --- Go Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -25,7 +25,8 @@
   '(
     company
     dap-mode
-    (company-go :requires company)
+    (company-go :requires company
+                :toggle (eq go-backend 'go-mode))
     counsel-gtags
     eldoc
     flycheck
@@ -59,8 +60,7 @@
     (add-to-list 'spacemacs--dap-supported-modes 'go-mode))
   (add-hook 'go-mode-local-vars-hook #'spacemacs//go-setup-dap))
 
-(defun go/post-init-counsel-gtags ()
-  (spacemacs/counsel-gtags-define-keys-for-mode 'go-mode))
+(defun go/post-init-counsel-gtags nil)
 
 (defun go/post-init-eldoc ()
   (add-hook 'go-mode-local-vars-hook #'spacemacs//go-setup-eldoc))

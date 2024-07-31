@@ -1,6 +1,6 @@
 ;;; packages.el --- Haskell Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -309,8 +309,7 @@
 
   (with-eval-after-load 'yasnippet (haskell-snippets-initialize)))
 
-(defun haskell/post-init-counsel-gtags ()
-  (spacemacs/counsel-gtags-define-keys-for-mode 'haskell-mode))
+(defun haskell/post-init-counsel-gtags nil)
 
 ;; doesn't support haskell-literate-mode :(
 (defun haskell/init-hindent ()

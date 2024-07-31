@@ -1,6 +1,6 @@
 ;;; packages.el --- Erlang Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -65,5 +65,4 @@
 (defun erlang/post-init-ggtags ()
   (add-hook 'erlang-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
-(defun erlang/post-init-counsel-gtags ()
-  (spacemacs/counsel-gtags-define-keys-for-mode 'erlang-mode))
+(defun erlang/post-init-counsel-gtags nil)

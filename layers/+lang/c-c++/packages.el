@@ -1,6 +1,6 @@
 ;;; packages.el --- C/C++ Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -127,9 +127,7 @@
     :defer t
     :commands company-ycmd))
 
-(defun c-c++/post-init-counsel-gtags ()
-  (dolist (mode c-c++-modes)
-    (spacemacs/counsel-gtags-define-keys-for-mode mode)))
+(defun c-c++/post-init-counsel-gtags nil)
 
 (defun c-c++/init-cpp-auto-include ()
   (use-package cpp-auto-include

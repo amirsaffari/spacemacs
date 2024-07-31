@@ -1,6 +1,6 @@
 ;;; packages.el --- Scheme Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -144,8 +144,7 @@
 (defun scheme/post-init-ggtags ()
   (add-hook 'scheme-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
-(defun scheme/post-init-counsel-gtags ()
-  (spacemacs/counsel-gtags-define-keys-for-mode 'scheme-mode))
+(defun scheme/post-init-counsel-gtags nil)
 
 (defun scheme/pre-init-org ()
   (spacemacs|use-package-add-hook org

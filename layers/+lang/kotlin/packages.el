@@ -1,6 +1,6 @@
 ;;; packages.el --- kotlin layer packages file for Spacemacs.
 ;;
-;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
 ;; Author: Shanavas M <shanavas@disroot.org>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -51,5 +51,4 @@
 (defun kotlin/post-init-ggtags ()
   (add-hook 'kotlin-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
-(defun kotlin/post-init-counsel-gtags ()
-  (spacemacs/counsel-gtags-define-keys-for-mode 'kotlin-mode))
+(defun kotlin/post-init-counsel-gtags nil)

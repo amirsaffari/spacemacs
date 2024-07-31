@@ -1,6 +1,6 @@
 ;;; packages.el --- Asm Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2022 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
 ;;
 ;; Author: Tu, Do Hoang <tuhdo1710@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -75,5 +75,4 @@
 (defun asm/post-init-ggtags ()
   (add-hook 'asm-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
-(defun asm/post-init-counsel-gtags ()
-  (spacemacs/counsel-gtags-define-keys-for-mode 'asm-mode))
+(defun asm/post-init-counsel-gtags nil)
