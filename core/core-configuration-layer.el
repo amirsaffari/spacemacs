@@ -441,10 +441,7 @@ cache folder.")
           (configuration-layer/elpa-directory
            configuration-layer--elpa-root-directory))
     (setq package-archives (configuration-layer//resolve-package-archives
-                            configuration-layer-elpa-archives))
-    ;; optimization, no need to activate all the packages so early
-    (setq package-enable-at-startup nil)
-    (package-initialize 'noactivate)))
+                            configuration-layer-elpa-archives))))
 
 (autoload 'quelpa "quelpa")
 (autoload 'quelpa-checkout "quelpa")
@@ -643,6 +640,11 @@ To prevent package from being installed or uninstalled set the variable
   (configuration-layer//configure-layers configuration-layer--used-layers)
   ;; load layers lazy settings
   (configuration-layer/load-auto-layer-file)
+  ;; try the package-quickstart-file before detecting package installation
+  (when (and (or package-quickstart dotspacemacs-enable-package-quickstart)
+             package-quickstart-file)
+    (setq package-quickstart t)
+    (load (file-name-sans-extension package-quickstart-file) t nil nil t))
   ;; install and/or uninstall packages
   (when spacemacs-sync-packages
     (let ((packages
@@ -1399,7 +1401,7 @@ Returns nil if the directory is not a category."
 (defun configuration-layer//get-layer-parent-category (layer-name)
   "Return a parent category symbol for given LAYER-NAME.
 Returns nil if there is no layer named LAYER-NAME."
-  (when-let ((lp (configuration-layer/get-layer-path layer-name)))
+  (when-let* ((lp (configuration-layer/get-layer-path layer-name)))
     (thread-last lp
                  directory-file-name
                  file-name-directory
@@ -1519,7 +1521,8 @@ If `SKIP-LAYER-DEPS' is non nil then skip loading of layer dependenciesl"
   (dolist (x layer-names)
     (unless (member x configuration-layer--layers-dependencies)
       (add-to-list 'configuration-layer--layers-dependencies x)
-      (configuration-layer//load-layer-files x '("layers")))))
+      (unless configuration-layer--declared-layers-usedp
+        (configuration-layer//load-layer-files x '("layers"))))))
 
 (defun configuration-layer//declare-used-layers (layers-specs)
   "Declare used layers from LAYERS-SPECS list."
@@ -1541,8 +1544,10 @@ If `SKIP-LAYER-DEPS' is non nil then skip loading of layer dependenciesl"
             (reverse configuration-layer--used-layers)))
     ;; declare additional layer required by used layers
     ;; this layers will be at the beginning of `configuration-layer--used-layers'
-    (dolist (layer-name configuration-layer--layers-dependencies)
-      (configuration-layer/declare-layer layer-name))
+    (let ((ulayers (mapcar (lambda (x) (if (listp x) (car x) x)) layers-specs)))
+      (dolist (layer-name configuration-layer--layers-dependencies)
+        (unless (member layer-name ulayers)
+          (configuration-layer/declare-layer layer-name))))
     ;; distribution and bootstrap layers are always first
     (let ((distribution (if configuration-layer-force-distribution
                             configuration-layer-force-distribution
@@ -2423,7 +2428,7 @@ depends on it."
 
 (defun configuration-layer//package-delete (pkg-name)
   "Delete package with name PKG-NAME."
-  (if-let ((pkg (car (alist-get pkg-name package-alist))))
+  (if-let* ((pkg (car (alist-get pkg-name package-alist))))
       ;; add force flag to ignore dependency checks in Emacs25
       (if (configuration-layer//system-package-p pkg)
           (message "Would have removed package %s but this is a system package so it has not been changed." pkg-name)

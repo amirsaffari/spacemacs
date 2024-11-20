@@ -220,13 +220,13 @@ will be applied to scale the banner."
   'spacemacs-dotspacemacs-init)
 
 (spacemacs|defc dotspacemacs-startup-buffer-show-version t
-  "If true, show Spacemacs and Emacs version at the top right of the
+  "If non-nil, show Spacemacs and Emacs version at the top right of the
 Spacemacs buffer."
   'boolean
   'spacemacs-dotspacemacs-init)
 
-(spacemacs|defc dotspacemacs-startup-buffer-show-icons t
-  "If true, show file icons for entries and headings on spacemacs buffer.
+(spacemacs|defc dotspacemacs-startup-buffer-show-icons nil
+  "If non-nil, show file icons for entries and headings on spacemacs buffer.
 This has no effect in terminal or if \"all-the-icons\" is not installed."
   'boolean
   'spacemacs-dotspacemacs-init)
@@ -242,7 +242,7 @@ This has no effect in terminal or if \"all-the-icons\" is not installed."
   'spacemacs-dotspacemacs-init)
 
 (spacemacs|defc dotspacemacs-check-for-update nil
-  "If non nil then spacemacs will check for updates at startup
+  "If non-nil then spacemacs will check for updates at startup
 when the current branch is not `develop'. Note that checking for
 new versions works via git commands, thus it calls GitHub services
 whenever you start Emacs."
@@ -474,6 +474,16 @@ window."
 (spacemacs|defc dotspacemacs-maximize-window-keep-side-windows t
   "Whether side windows (such as those created by treemacs or neotree)
 are kept or minimized by `spacemacs/toggle-maximize-window' (SPC w m)."
+  'boolean
+  'spacemacs-dotspacemacs-init)
+
+(spacemacs|defc dotspacemacs-enable-load-hints nil
+  "If nil, no load-hints enabled. If t, enable the load-hints."
+  '(choice (const nil) (const t) (const aggressive))
+  'spacemacs-dotspacemacs-init)
+
+(spacemacs|defc dotspacemacs-enable-package-quickstart nil
+  "If t, try the `package-quickstart' for package startup."
   'boolean
   'spacemacs-dotspacemacs-init)
 
