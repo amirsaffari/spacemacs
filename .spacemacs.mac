@@ -69,6 +69,13 @@ This function should only modify configuration layer settings."
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      treemacs
+
+     (python :variables python-enable-yapf-format-on-save t)
+     (auto-completion :variables auto-completion-enable-snippets-in-popup t)
+     (auto-completion :variables auto-completion-enable-help-tooltip t)
+     (latex :variables latex-enable-auto-fill t)
+     (latex :variables latex-enable-folding t)
+     (spell-checking :variables spell-checking-enable-by-default nil)
      )
 
 
@@ -83,7 +90,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       doom-themes
                                       highlight-indent-guides
-                                     )
+                                      )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -258,8 +265,9 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
+                         doom-solarized-light
                          doom-one
-                        )
+                         )
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -557,7 +565,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -565,7 +573,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-)
+  )
 
 
 (defun dotspacemacs/user-load ()
@@ -573,7 +581,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -582,7 +590,7 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-    ;; ====== Avoid yank on mouse-click
+  ;; ====== Avoid yank on mouse-click
   (add-hook 'spacemacs-buffer-mode-hook (lambda ()
                                           (set (make-local-variable 'mouse-1-click-follows-link) nil)))
 
@@ -625,18 +633,7 @@ before packages are loaded."
   (setq venv-location "~/projects/py_envs/")
 
   ;; (remove-hook 'python-mode-hook 'spacemacs//init-eldoc-python-mode)
-  (setq-default dotspacemacs-configuration-layers
-                '((python :variables python-enable-yapf-format-on-save t)))
   ;; ====== Python =======
-
-  ;; ====== Yasnippet =======
-  (setq-default dotspacemacs-configuration-layers
-                '((auto-completion :variables
-                                   auto-completion-enable-snippets-in-popup t)))
-  (setq-default dotspacemacs-configuration-layers
-                '((auto-completion :variables
-                                   auto-completion-enable-help-tooltip t)))
-  ;; ====== Yasnippet =======
 
   ;; ====== JS ======
   ;; (setq-default js2-basic-offset 2)
@@ -661,12 +658,8 @@ before packages are loaded."
 
   ;; ====== Latex =======
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-  dotspacemacs-configuration-layers '((latex :variables latex-enable-auto-fill t))
-  dotspacemacs-configuration-layers '((latex :variables latex-enable-folding t))
 
   ;; ====== Spelling ======
-  (setq-default dotspacemacs-configuration-layers
-                '((spell-checking :variables spell-checking-enable-by-default nil)))
   (setq ispell-program-name "/usr/local/bin/aspell")
 
   ;; ====== Tidal =======
@@ -737,7 +730,7 @@ before packages are loaded."
   (setq require-final-newline t)
   (setq inhibit-startup-message t)
   (mouse-avoidance-mode 'cat-and-mouse)
-)
+  )
 
 ;; ========= Round numbers in a region
 (defun my-round-nb (start end)
