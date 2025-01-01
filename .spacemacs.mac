@@ -90,6 +90,9 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       doom-themes
                                       highlight-indent-guides
+                                      undo-fu
+                                      undo-fu-session
+                                      vundo
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -623,78 +626,42 @@ before packages are loaded."
   (setq highlight-indent-guides-responsive 'top)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
-  ;; ====== Python =======
-  ;; (load "cython-mode")
-
-  ;; Virtualenvwrapper
-  (require 'virtualenvwrapper)
-  (venv-initialize-interactive-shells) ;; if you want interactive shell support
-  (venv-initialize-eshell) ;; if you want eshell support
-  (setq venv-location "~/projects/py_envs/")
-
-  ;; (remove-hook 'python-mode-hook 'spacemacs//init-eldoc-python-mode)
-  ;; ====== Python =======
-
-  ;; ====== JS ======
-  ;; (setq-default js2-basic-offset 2)
-  ;; (setq-default js-indent-level 2)
-
-  ;; ====== C++ ======
-  ;; (setq-default dotspacemacs-configuration-layers
-  ;; '((c-c++ :variables
-  ;;          c-c++-default-mode-for-headers 'c++-mode)))
-  ;; (setq-default dotspacemacs-configuration-layers
-  ;;               '((c-c++ :variables c-c++-enable-clang-support t)))
-
-  ;; ((c++-mode (helm-make-build-dir . "")))
-  ;; (put 'helm-make-build-dir 'safe-local-variable 'stringp)
-
-  ;; Bind clang-format-region to C-M-tab in all modes:
-  ;; (global-set-key [C-M-tab] 'clang-format-region)
-  ;; Bind clang-format-buffer to tab on the c++-mode only:
-  ;; (add-hook 'c++-mode-hook 'clang-format-bindings)
-  ;; (defun clang-format-bindings ()
-  ;;   (define-key c++-mode-map [tab] 'clang-format-buffer))
-
-  ;; ====== Latex =======
-  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-
-  ;; ====== Spelling ======
+  ;; ====== Spelling
   (setq ispell-program-name "/usr/local/bin/aspell")
 
-  ;; ====== Tidal =======
-  ;; (require 'tidal)
-
-  ;; ====== GDScript ======
-  ;; (require 'gdscript-mode)
+  ;; ====== Visual Line Mode
+  (global-visual-line-mode t)
 
   ;; ====== Set temporary directory
   (setq temporary-file-directory "~/.emacs.d/tmp/")
 
-  ;; Prevent undo tree files from polluting your git repo
-  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/tmp/")))
+  ;; ====== Undo Tree
+  (undo-fu-session-global-mode)
+  (setq vundo-glyph-alist vundo-unicode-symbols)
+  (setq vundo-roll-back-on-quit nil)
+  ;; (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/tmp/")))
 
-  ;; ===== Set standard indent to 4 ====
+  ;; ===== Set standard indent to 4
   (setq-default indent-tabs-mode nil)
   (setq standard-indent 4)
   (setq-default tab-width 4)
 
-  ;; ========== Line by line scrolling ==========
+  ;; ===== Line by line scrolling
   (setq scroll-step 1)
   (setq scroll-conservatively 5)
   ;; (require 'smooth-scroll) ;; Smooth scroll
   ;; (smooth-scroll-mode 1) ;; Enable it
   ;; (setq smooth-scroll/vscroll-step-size 2) ;; Set the speed right
 
-  ;; ========== Prevent Emacs from making backup files ==========
+  ;; ===== Prevent Emacs from making backup files
   (setq make-backup-files nil)
 
-  ;; ========== Set the fill column ==========
+  ;; ===== Set the fill column
   (setq-default fill-column 150)
   (setq whitespace-line-column 150) ;; limit line length
   (setq flycheck-flake8-maximum-line-length 150)
 
-  ;; ========== Some key-bindings
+  ;; ===== Some key-bindings
   (global-set-key "\C-x\C-m" 'execute-extended-command)
   (global-set-key "\C-c\C-m" 'execute-extended-command)
 
@@ -712,17 +679,10 @@ before packages are loaded."
   (define-key esc-map [C-return]     'dabbrev-completion)
   ;; (spacemacs/set-leader-keys "oc" 'dabbrev-expand)
 
-  ;; (define-key evil-normal-state-map "L" 'evil-end-of-line)
-  ;; (define-key evil-insert-state-map "L" 'end-of-line)
-  ;; (define-key evil-visual-state-map "L" 'evil-end-of-line)
-  ;; (define-key evil-motion-state-map "L" 'evil-end-of-line)
+  (global-set-key (kbd "C-x u") #'vundo)
+  ;; (define-key vundo-mode-map (kbd "q") #'vundo-confirm)
 
-  ;; (define-key evil-normal-state-map "H" 'evil-beginning-of-line)
-  ;; (define-key evil-insert-state-map "H" 'beginning-of-line)
-  ;; (define-key evil-visual-state-map "H" 'evil-beginning-of-line)
-  ;; (define-key evil-motion-state-map "H" 'evil-beginning-of-line)
-
-  ;; ========= Some UI modifications
+  ;; ===== Some UI modifications
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 
@@ -730,6 +690,20 @@ before packages are loaded."
   (setq require-final-newline t)
   (setq inhibit-startup-message t)
   (mouse-avoidance-mode 'cat-and-mouse)
+
+  ;; ====== Python
+  ;; (load "cython-mode")
+
+  ;; Virtualenvwrapper
+  (require 'virtualenvwrapper)
+  (venv-initialize-interactive-shells) ;; if you want interactive shell support
+  (venv-initialize-eshell) ;; if you want eshell support
+  (setq venv-location "~/projects/py_envs/")
+
+  ;; (remove-hook 'python-mode-hook 'spacemacs//init-eldoc-python-mode)
+
+  ;; ====== Latex
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   )
 
 ;; ========= Round numbers in a region
@@ -746,3 +720,22 @@ before packages are loaded."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(package-selected-packages
+     '(yasnippet-snippets yapfify yaml-mode ws-butler writeroom-mode winum which-key wgrep web-mode web-beautify vundo volatile-highlights vim-powerline vi-tilde-fringe unfill undo-fu-session undo-fu typescript-mode treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired toc-org term-cursor tagedit symon symbol-overlay string-edit-at-point sql-indent sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc smex smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-ref org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file npm-mode nodejs-repl nameless mwim mvn multi-line meghanada maven-test-mode markdown-toc macrostep lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint json-reformat json-navigator json-mode js2-refactor js-doc ivy-yasnippet ivy-xref ivy-rtags ivy-purpose ivy-hydra ivy-bibtex ivy-avy inspector info+ indent-guide importmagic impatient-mode hybrid-mode hungry-delete holy-mode hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation highlight-indent-guides hide-comnt helm-make haskell-snippets groovy-mode groovy-imports google-translate google-c-style golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link gh-md gendoxy flyspell-correct-ivy flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-tex evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr emmet-mode elisp-slime-nav elisp-demos elisp-def ein editorconfig dumb-jump drag-stuff dotenv-mode doom-themes disaster disable-mouse dired-quick-sort diminish diff-hl devdocs define-word dante cython-mode csv-mode cpp-auto-include counsel-projectile counsel-css company-ycmd company-web company-rtags company-reftex company-quickhelp company-math company-cabal company-c-headers company-auctex company-anaconda column-enforce-mode code-review code-cells cmm-mode clean-aindent-mode centered-cursor-mode browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile attrap all-the-icons aggressive-indent ace-link)))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+  )
