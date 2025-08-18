@@ -1,6 +1,6 @@
-;;; packages.el --- Language Server Protocol Layer packages file for Spacemacs
+;;; packages.el --- Language Server Protocol Layer packages file for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Fangrui Song <i@maskray.me>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -56,6 +56,10 @@
     (if lsp-use-upstream-bindings
         (spacemacs/lsp-bind-upstream-keys)
       (spacemacs/lsp-bind-keys))
+    (setq lsp-completion-provider (if (or (equal :all lsp-manage-backends-manually)
+                                          (member major-mode lsp-manage-backends-manually))
+                                      :none
+                                    :capf))
     ;; This sets the lsp indentation for all modes derived from web-mode.
     (add-to-list 'lsp--formatting-indent-alist '(web-mode . web-mode-markup-indent-offset))
     (add-hook 'lsp-after-open-hook (lambda ()

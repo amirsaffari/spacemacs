@@ -1,6 +1,6 @@
-;;; packages.el --- Org Layer packages File for Spacemacs
+;;; packages.el --- Org Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -41,11 +41,7 @@
     (org-vcard :toggle org-enable-org-contacts-support)
     (org-brain :toggle org-enable-org-brain-support)
     (org-expiry :location built-in)
-    ;; temporarily point org-journal to dalanicolai fork until dalanicolai's
-    ;; PR's https://github.com/bastibe/org-journal/pulls get merged
-    (org-journal
-     :location (recipe :fetcher github :repo "dalanicolai/org-journal")
-     :toggle org-enable-org-journal-support)
+    (org-journal :toggle org-enable-org-journal-support)
     org-download
     (org-jira :toggle org-enable-jira-support)
     org-mime
@@ -128,10 +124,9 @@
 
 (defun org/init-org ()
   (use-package org
-    :defer (spacemacs/defer)
+    :defer t
     :commands (orgtbl-mode)
     :init
-    (spacemacs|require-when-dumping 'org)
     (setq org-clock-persist-file (concat spacemacs-cache-directory
                                          "org-clock-save.el")
           org-id-locations-file (concat spacemacs-cache-directory
@@ -182,9 +177,7 @@
           "c" 'org-capture-finalize
           "k" 'org-capture-kill
           "r" 'org-capture-refile)
-        ;; Evil bindins seem not to be applied until at least one
-        ;; Evil state is executed
-        (evil-normal-state))
+        (evil-normalize-keymaps))
       ;; Must be done everytime we run org-capture otherwise it will
       ;; be ignored until insert mode is entered.
       (add-hook 'org-capture-mode-hook 'spacemacs//org-capture-start))
@@ -458,30 +451,14 @@ Will work on both org-mode and any mode that accepts plain html."
 
     ;; Evilify the calendar tool on C-c .
     (unless (eq 'emacs dotspacemacs-editing-style)
-      (define-key org-read-date-minibuffer-local-map (kbd "M-h")
-                  (lambda () (interactive)
-                    (org-eval-in-calendar '(calendar-backward-day 1))))
-      (define-key org-read-date-minibuffer-local-map (kbd "M-l")
-                  (lambda () (interactive)
-                    (org-eval-in-calendar '(calendar-forward-day 1))))
-      (define-key org-read-date-minibuffer-local-map (kbd "M-k")
-                  (lambda () (interactive)
-                    (org-eval-in-calendar '(calendar-backward-week 1))))
-      (define-key org-read-date-minibuffer-local-map (kbd "M-j")
-                  (lambda () (interactive)
-                    (org-eval-in-calendar '(calendar-forward-week 1))))
-      (define-key org-read-date-minibuffer-local-map (kbd "M-H")
-                  (lambda () (interactive)
-                    (org-eval-in-calendar '(calendar-backward-month 1))))
-      (define-key org-read-date-minibuffer-local-map (kbd "M-L")
-                  (lambda () (interactive)
-                    (org-eval-in-calendar '(calendar-forward-month 1))))
-      (define-key org-read-date-minibuffer-local-map (kbd "M-K")
-                  (lambda () (interactive)
-                    (org-eval-in-calendar '(calendar-backward-year 1))))
-      (define-key org-read-date-minibuffer-local-map (kbd "M-J")
-                  (lambda () (interactive)
-                    (org-eval-in-calendar '(calendar-forward-year 1)))))
+      (define-key org-read-date-minibuffer-local-map (kbd "M-h") #'org-calendar-backward-day)
+      (define-key org-read-date-minibuffer-local-map (kbd "M-l") #'org-calendar-forward-day)
+      (define-key org-read-date-minibuffer-local-map (kbd "M-k") #'org-calendar-backward-week)
+      (define-key org-read-date-minibuffer-local-map (kbd "M-j") #'org-calendar-forward-week)
+      (define-key org-read-date-minibuffer-local-map (kbd "M-H") #'org-calendar-backward-month)
+      (define-key org-read-date-minibuffer-local-map (kbd "M-L") #'org-calendar-forward-month)
+      (define-key org-read-date-minibuffer-local-map (kbd "M-K") #'org-calendar-backward-year)
+      (define-key org-read-date-minibuffer-local-map (kbd "M-J") #'org-calendar-forward-year))
 
     (spacemacs|define-transient-state org-babel
       :title "Org Babel Transient state"
@@ -529,7 +506,8 @@ Will work on both org-mode and any mode that accepts plain html."
       "ip" 'org-agenda-set-property
       "iP" 'org-agenda-priority
       "it" 'org-agenda-set-tags
-      "sr" 'org-agenda-refile)
+      "sr" 'org-agenda-refile
+      "TT" 'org-agenda-todo)
     (spacemacs|define-transient-state org-agenda
       :title "Org-agenda transient state"
       :on-enter (setq which-key-inhibit t)
@@ -620,6 +598,19 @@ Headline^^            Visit entry^^               Filter^^                    Da
       (use-package org-contacts))
     (evilified-state-evilify-map org-agenda-mode-map
       :mode org-agenda-mode
+      :pre-bindings
+      ;; Remove some key bindings that cannot be evilified.  These commands are
+      ;; bound to other keys, below.
+      ;;
+      ;; `org-agenda-filter-remove-all' is not bound (`org-agenda-set-tags' is
+      ;; bound to ":", which is mapped to "|")
+      ;;
+      ;; `org-agenda-filter-by-tag' is not bound, but "\\" is bound to
+      ;; `org-agenda-filter' instead, which is a good enough substitute.
+      (kbd "C-n") nil                   ;`org-agenda-next-line'
+      "G" nil                           ;`org-agenda-toggle-time-grid'
+      "|" nil                           ;`org-agenda-filter-remove-all'
+      "\\" nil                          ;`org-agenda-filter-by-tag'
       :bindings
       "j" 'org-agenda-next-line
       "k" 'org-agenda-previous-line
@@ -831,7 +822,7 @@ Headline^^            Visit entry^^               Filter^^                    Da
       "aop" 'spacemacs/org-project-capture-capture
       "po" 'spacemacs/org-project-capture-goto-todos)
     :config
-    (if (file-name-absolute-p org-project-capture-projects-file)
+    (if (and (stringp org-project-capture-projects-file) (file-name-absolute-p org-project-capture-projects-file))
         (progn
           (setq org-project-capture-projects-file org-project-capture-projects-file)
           (push (org-project-capture-project-todo-entry :empty-lines 1)
@@ -1064,12 +1055,20 @@ Headline^^            Visit entry^^               Filter^^                    Da
           org-appear-autoemphasis t
           org-appear-autosubmarkers t)
     :config
-    (when (and (eq org-appear-trigger 'manual)
-               (memq dotspacemacs-editing-style '(vim hybrid)))
-      (add-hook 'org-mode-hook
-                (lambda ()
-                  (add-hook 'evil-insert-state-entry-hook #'org-appear-manual-start nil t)
-                  (add-hook 'evil-insert-state-exit-hook #'org-appear-manual-stop nil t))))))
+    (when (eq org-appear-trigger 'manual)
+      (when (eq dotspacemacs-editing-style 'vim)
+        (add-hook 'org-appear-mode-hook
+                  (lambda ()
+                    (add-hook 'evil-insert-state-entry-hook #'org-appear-manual-start nil t)
+                    (add-hook 'evil-insert-state-exit-hook #'org-appear-manual-stop nil t)
+                    )))
+
+      (when (eq dotspacemacs-editing-style 'hybrid)
+        (add-hook 'org-appear-mode-hook
+                  (lambda ()
+                    (add-hook 'evil-hybrid-state-entry-hook #'org-appear-manual-start nil t)
+                    (add-hook 'evil-hybrid-state-exit-hook #'org-appear-manual-stop nil t)
+                    ))))))
 
 (defun org/init-org-transclusion ()
   (use-package org-transclusion

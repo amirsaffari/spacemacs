@@ -1,9 +1,9 @@
-;;; extensions.el --- geolocation configuration File for Spacemacs
+;;; dotspacemacs.el --- Spacemacs Test Configuration -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
-;; Author: Uri Sharf <uri.sharf@me.com>
-;; URL: https://github.com/usharf/spacemacs
+;; Author: Lin Sun <sunlin7 AT hotmail.com>
+;; URL: https://github.com/syl20bnr/spacemacs
 ;;
 ;; This file is not part of GNU Emacs.
 ;;
@@ -20,11 +20,11 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-(setq geolocation-post-extensions '(theme-changer))
-
-(defun geolocation/init-theme-changer ()
-  "Initialize theme-changer"
-  (use-package theme-changer
-    :if (and geolocation-enable-automatic-theme-changer
-             (> (length dotspacemacs-themes) 1))))
+(defun dotspacemacs/layers ()
+  (setq-default
+   dotspacemacs-distribution 'spacemacs-base
+   dotspacemacs-configuration-layers '(python)))
+(defun dotspacemacs/init ())
+(defun dotspacemacs/user-init ())
+(defun dotspacemacs/config ())
+(defun dotspacemacs/user-config ())

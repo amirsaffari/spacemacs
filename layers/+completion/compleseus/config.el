@@ -1,6 +1,6 @@
-;;; config.el --- compleseus configuration File for Spacemacs
+;;; config.el --- compleseus configuration File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Thanh Vuong <thanhvg@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -182,15 +182,17 @@ and with narrowing key \"B\".")
        (let* ((prev-buffers (delq (window-buffer) (mapcar #'car (window-prev-buffers))))
               (next-buffers (window-next-buffers))
               (buffers
-               (if vertico-cycle
-                   ;; If cycling is enabled, this order makes sense:
-                   ;; One can move down to previous buffers,
-                   ;; and move up to next buffers.
-                   (append (list (window-buffer))
-                           (seq-difference prev-buffers next-buffers)
-                           (nreverse next-buffers))
-                 ;; Note that next-buffers is a subset of prev-buffers.
-                 (cons (window-buffer) prev-buffers))))
+               (cl-remove-if-not
+                #'buffer-live-p
+                (if vertico-cycle
+                    ;; If cycling is enabled, this order makes sense:
+                    ;; One can move down to previous buffers,
+                    ;; and move up to next buffers.
+                    (append (list (window-buffer))
+                            (seq-difference prev-buffers next-buffers)
+                            (nreverse next-buffers))
+                  ;; Note that next-buffers is a subset of prev-buffers.
+                  (cons (window-buffer) prev-buffers)))))
          (consult--buffer-query
           :sort nil
           :filter nil

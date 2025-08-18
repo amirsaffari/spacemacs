@@ -1,6 +1,6 @@
-;;; packages.el --- sql Layer packages File for Spacemacs
+;;; packages.el --- sql Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Brian Hicks <brian@brianthicks.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -26,7 +26,7 @@
         company
         org
         sql
-        (sql-indent :location elpa)
+        (sql-indent :location elpa :toggle sql-auto-indent)
         (sqlfmt :location local)
         (sqlup-mode :toggle sql-capitalize-keywords)
         ))
@@ -188,7 +188,6 @@
 
 (defun sql/init-sql-indent ()
   (use-package sql-indent
-    :if sql-auto-indent
     :defer t
     :init (add-hook 'sql-mode-hook 'sqlind-minor-mode)
     :config (spacemacs|hide-lighter sqlind-minor-mode)))

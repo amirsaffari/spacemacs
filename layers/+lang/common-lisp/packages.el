@@ -1,6 +1,6 @@
-;;; packages.el --- Common Lisp Layer packages File for Spacemacs
+;;; packages.el --- Common Lisp Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -29,8 +29,8 @@
     evil-cleverparens
     evil-collection
     ggtags
-    counsel-gtags
     helm
+    org
     rainbow-identifiers
     slime
     (slime-company :requires company)))
@@ -70,7 +70,9 @@
 (defun common-lisp/post-init-ggtags ()
   (add-hook 'common-lisp-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
-(defun common-lisp/post-init-counsel-gtags nil)
+(defun common-lisp/pre-init-org ()
+  (spacemacs|use-package-add-hook org
+    :post-config (add-to-list 'org-babel-load-languages '(lisp . t))))
 
 (defun common-lisp/post-init-rainbow-identifiers ()
   (add-hook 'lisp-mode-hook #'colors//rainbow-identifiers-ignore-keywords))

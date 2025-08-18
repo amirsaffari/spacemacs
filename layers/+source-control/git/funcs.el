@@ -1,6 +1,6 @@
-;;; funcs.el --- Colors Layer functions File
+;;; funcs.el --- Colors Layer functions File  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -127,7 +127,7 @@ error in process filter: ghub--signal-error: peculiar error:
  (typeName . \"Query\")
  (fieldName . \"nil\"))
  (locations ((line . 2) (column . 1)))
- (message . \"Field 'nil' doesn't exist on type 'Query'\"))
+ (message . \"Field `nil' doesn't exist on type `Query'\"))
 
 Function adapted from issue:
 https://github.com/magit/forge/issues/80#issuecomment-456103195

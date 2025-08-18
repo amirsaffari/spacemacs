@@ -1,6 +1,6 @@
-;;; packages.el --- compleseus layer packages file for Spacemacs.
+;;; packages.el --- compleseus layer packages file for Spacemacs.  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Thanh Vuong <thanhvg@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -37,14 +37,13 @@
     (nerd-icons-completion :toggle compleseus-use-nerd-icons)
     orderless
     persp-mode
+    savehist
     (selectrum :toggle (eq compleseus-engine 'selectrum))
     (vertico
      :toggle (eq compleseus-engine 'vertico)
      :location elpa)
     (vertico-posframe :toggle (and (eq compleseus-engine 'vertico)
-                                  compleseus-use-vertico-posframe))
-    (grep :location built-in)
-    wgrep))
+                                   compleseus-use-vertico-posframe))))
 
 (defun compleseus/pre-init-auto-highlight-symbol ()
   (spacemacs|use-package-add-hook auto-highlight-symbol
@@ -300,6 +299,9 @@
     (define-key embark-file-map "s" 'spacemacs/compleseus-search-from)
     (define-key embark-buffer-map "s" #'spacemacs/embark-consult-line-multi)
     (add-to-list 'embark-multitarget-actions #'spacemacs/embark-consult-line-multi)
+    ;; Allow using `embark-select' and `embark-act-all' instead of CRM to select packages
+    ;; to update in `configuration-layer/update-packages'.
+    (add-to-list 'embark-multitarget-actions 'configuration-layer/select-packages-to-update)
     (defvar spacemacs-embark-layer-map
       (let ((map (make-sparse-keymap)))
         (set-keymap-parent map embark-general-map)
@@ -479,23 +481,6 @@
             (undecorated . nil)))
     (vertico-posframe-mode 1)))
 
-(defun compleseus/post-init-grep ()
-  (spacemacs/set-leader-keys-for-major-mode 'grep-mode
-    "w" 'spacemacs/compleseus-grep-change-to-wgrep-mode
-    "f" 'next-error-follow-minor-mode))
-
-(defun compleseus/init-wgrep ()
-  (evil-define-key 'normal wgrep-mode-map ",," #'spacemacs/wgrep-finish-edit)
-  (evil-define-key 'normal wgrep-mode-map ",c" #'spacemacs/wgrep-finish-edit)
-  (evil-define-key 'normal wgrep-mode-map ",a" #'spacemacs/wgrep-abort-changes)
-  (evil-define-key 'normal wgrep-mode-map ",k" #'spacemacs/wgrep-abort-changes)
-  (evil-define-key 'normal wgrep-mode-map ",q" #'spacemacs/wgrep-abort-changes-and-quit)
-  (evil-define-key 'normal wgrep-mode-map ",s" #'spacemacs/wgrep-save-changes-and-quit)
-  (evil-define-key 'normal wgrep-mode-map ",r" #'wgrep-toggle-readonly-area)
-  (evil-define-key 'normal wgrep-mode-map ",d" #'wgrep-mark-deletion)
-  (evil-define-key 'normal wgrep-mode-map ",f" #'next-error-follow-minor-mode)
-  )
-
 (defun compleseus/init-compleseus-spacemacs-help ()
   (use-package compleseus-spacemacs-help
     :defer t
@@ -515,6 +500,11 @@
     (setq
      spacemacs--persp-display-buffers-func 'spacemacs/compleseus-switch-to-buffer
      spacemacs--persp-display-perspectives-func 'spacemacs/compleseus-spacemacs-layout-layouts)))
+
+(defun compleseus/pre-init-savehist ()
+  (spacemacs|use-package-add-hook savehist
+    :post-config
+    (add-to-list 'savehist-additional-variables '(vertico-repeat-history . 50))))
 
 (defun compleseus/init-nerd-icons-completion ()
   (use-package nerd-icons-completion

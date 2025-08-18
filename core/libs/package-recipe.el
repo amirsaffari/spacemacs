@@ -1,6 +1,6 @@
 ;;; package-recipe.el --- Package recipes as EIEIO objects  -*- lexical-binding:t; coding:utf-8 -*-
 
-;; Copyright (C) 2018-2024 Jonas Bernoulli
+;; Copyright (C) 2018-2025 Jonas Bernoulli
 
 ;; Author: Jonas Bernoulli <emacs.package-build@jonas.bernoulli.dev>
 ;; Maintainer: Jonas Bernoulli <emacs.package-build@jonas.bernoulli.dev>
@@ -122,9 +122,9 @@
   "Return a list of the names of packages with available recipes."
   (directory-files package-build-recipes-dir nil "^[^.]"))
 
-(defun package-recipe-read-name ()
+(defun package-recipe-read-name (&optional prompt)
   "Read the name of a package for which a recipe is available."
-  (completing-read "Package: " (package-recipe-recipes)))
+  (completing-read (or prompt "Package: ") (package-recipe-recipes)))
 
 (defun package-recipe-lookup (name)
   "Return a recipe object for the package named NAME.
@@ -148,7 +148,7 @@ file is invalid, then raise an error."
             (setq fetcher 'git-remote-hg)
             (setq args (plist-put args :url (concat "hg::" (oref rcp url)))))
           (setq rcp (apply (intern (format "package-%s-recipe" fetcher))
-                           name :name name args))
+                           :name name args))
           (unless (oref rcp url)
             (oset rcp url (format (oref rcp url-format) (oref rcp repo))))
           rcp)

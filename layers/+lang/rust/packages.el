@@ -1,6 +1,6 @@
-;;; packages.el --- Rust Layer packages File for Spacemacs
+;;; packages.el --- Rust Layer packages File for Spacemacs  -*- lexical-binding: nil; -*-
 ;;
-;; Copyright (c) 2012-2024 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2025 Sylvain Benner & Contributors
 ;;
 ;; Author: Chris Hoeppner <me@mkaito.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -23,15 +23,12 @@
 
 (defconst rust-packages
   '(
-    counsel-gtags
     dap-mode
     ggtags
     ron-mode
     rustic
     smartparens))
 
-
-(defun rust/post-init-counsel-gtags nil)
 
 (defun rust/pre-init-dap-mode ()
   (when (eq rust-backend 'lsp)
