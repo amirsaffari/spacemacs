@@ -63,7 +63,7 @@ This function should only modify configuration layer settings."
      bibtex
      csv
      ;; helm
-     ;; lsp
+     lsp
      multiple-cursors
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -93,6 +93,7 @@ This function should only modify configuration layer settings."
                                       undo-fu
                                       undo-fu-session
                                       vundo
+                                      gdscript-mode
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -617,8 +618,8 @@ before packages are loaded."
   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
   ;; may have their own settings.
   ;; (load-theme 'doom-solarized-dark t)
-  (load-theme 'doom-solarized-light t)
-  ;; (load-theme 'doom-one t)
+  ;; (load-theme 'doom-solarized-light t)
+  (load-theme 'doom-one t)
   ;; (load-theme 'doom-peacock t)
 
   ;; ====== highlight indentation
@@ -701,6 +702,13 @@ before packages are loaded."
   (setq venv-location "~/projects/py_envs/")
 
   ;; (remove-hook 'python-mode-hook 'spacemacs//init-eldoc-python-mode)
+
+  ;; ====== Godot
+  (require 'gdscript-mode)
+  (setq gdscript-godot-executable "/Applications/Godot.app/Contents/MacOS/Godot")
+  (setq gdscript-use-tab-indents nil)
+  (setq gdscript-indent-offset 4)
+  (setq gdscript-gdformat-save-and-format t)
 
   ;; ====== Latex
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
