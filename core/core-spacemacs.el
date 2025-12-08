@@ -91,7 +91,7 @@ If PATH is provided, use it as the package directory, otherwise use `package-use
            (package-desc-name pkg-desc) pkg-dir))))))
 
 ;; Lookup load hints for a given file.
-(defun spacemacs//lookup-load-hints (file)
+(defsubst spacemacs//lookup-load-hints (file)
   "Find out the `load-hints' item for the FILE.
 Returns the directory path from load-hints where FILE is found."
   (unless (file-name-absolute-p file)
@@ -137,7 +137,7 @@ of directories to file basenames."
         (setq filename (expand-file-name name path)))
       (list feature filename noerror)))
 
-  (advice-add #'require :filter-args #'require@LOAD-HINTS)
+  (advice-add #'require :filter-args #'require@LOAD-HINTS '((depth . -99)))
 
   ;; Advice to update load-hints after autoload generation.
   (define-advice package-generate-autoloads (:after (name pkg-dir) LOAD-HINTS)
@@ -195,9 +195,14 @@ of directories to file basenames."
   (prefer-coding-system 'utf-8)
   ;; Extend use-package if installed.
   (spacemacs/use-package-extend)
-  ;; Evil mode settings for scrolling and jump behavior.
-  (setq-default evil-want-C-u-scroll t
-                evil-want-C-i-jump nil)
+  (setq-default
+   ;; Evil mode settings for scrolling and jump behavior.
+   evil-want-C-u-scroll t
+   evil-want-C-i-jump nil
+   ;; `evil-want-keybinding' needs to be set before loading evil, which can
+   ;; happen as a side effect of package installation or due to the user's
+   ;; dotfile, for example. `evil-collection' expects it to be nil.
+   evil-want-keybinding nil)
   ;; Load the user's dotspacemacs file.
   (dotspacemacs/load-file)
   ;; Call the user's initialization function.
@@ -333,8 +338,6 @@ defer call using `spacemacs-post-user-config-hook'."
      (when spacemacs--delayed-user-theme
        (spacemacs/load-theme spacemacs--delayed-user-theme
                              spacemacs--fallback-theme t))
-     ;; Display configuration layer summary.
-     (configuration-layer/display-summary)
      ;; Check for new Spacemacs version.
      (spacemacs/check-for-new-version nil spacemacs-version-check-interval)
      ;; Move cursor to link line in Spacemacs buffer.
@@ -345,6 +348,8 @@ defer call using `spacemacs-post-user-config-hook'."
      (setq read-process-output-max dotspacemacs-read-process-output-max)
      ;; Redraw Spacemacs buffer to ensure it displays correctly.
      (spacemacs-buffer//startup-hook)
+     ;; Display configuration layer summary.
+     (configuration-layer/display-summary)
      ;; Set garbage collection settings for performance.
      (setq gc-cons-threshold (car dotspacemacs-gc-cons)
            gc-cons-percentage (cadr dotspacemacs-gc-cons))))
