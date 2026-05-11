@@ -38,8 +38,8 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; ivy
-     helm
+     ivy
+     ;; helm
      auto-completion
      better-defaults
      emacs-lisp
@@ -617,9 +617,10 @@ before packages are loaded."
   ;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
   ;; may have their own settings.
   ;; (load-theme 'doom-solarized-dark t)
-  (load-theme 'doom-solarized-light t)
+  ;; (load-theme 'doom-solarized-light t)
   ;; (load-theme 'doom-one t)
   ;; (load-theme 'doom-peacock t)
+  (load-theme 'doom-gruvbox t)
 
   ;; ====== highlight indentation
   (setq highlight-indent-guides-method 'character)
