@@ -33,11 +33,14 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+<<<<<<< Updated upstream
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+=======
+>>>>>>> Stashed changes
      ivy
      ;; helm
      auto-completion
@@ -51,9 +54,9 @@ This function should only modify configuration layer settings."
      version-control
      python
      ipython-notebook
-     ;; html
-     ;; javascript
-     sql
+     html
+     javascript
+     ;; sql
      yaml
      ;; java
      ;; haskell
@@ -68,7 +71,7 @@ This function should only modify configuration layer settings."
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     treemacs
+     ;; treemacs
 
      (python :variables python-enable-yapf-format-on-save t)
      (auto-completion :variables auto-completion-enable-snippets-in-popup t)
@@ -89,6 +92,7 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
                                       doom-themes
+                                      gruvbox-theme
                                       highlight-indent-guides
                                       undo-fu
                                       undo-fu-session
@@ -628,7 +632,7 @@ before packages are loaded."
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
   ;; ====== Spelling
-  (setq ispell-program-name "/usr/local/bin/aspell")
+  ;; (setq ispell-program-name "/usr/local/bin/aspell")
 
   ;; ====== Visual Line Mode
   (global-visual-line-mode t)
@@ -699,7 +703,7 @@ before packages are loaded."
   (require 'virtualenvwrapper)
   (venv-initialize-interactive-shells) ;; if you want interactive shell support
   (venv-initialize-eshell) ;; if you want eshell support
-  (setq venv-location "~/projects/py_envs/")
+  (setq venv-location "~/Projects/py_envs/")
 
   ;; (remove-hook 'python-mode-hook 'spacemacs//init-eldoc-python-mode)
 
@@ -745,7 +749,55 @@ This function is called at the very end of Spacemacs initialization."
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
    '(package-selected-packages
-     '(yasnippet-snippets yapfify yaml-mode ws-butler writeroom-mode winum which-key wgrep web-mode web-beautify vundo volatile-highlights vim-powerline vi-tilde-fringe unfill undo-fu-session undo-fu typescript-mode treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired toc-org term-cursor tagedit symon symbol-overlay string-edit-at-point sql-indent sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc smex smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-ref org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file npm-mode nodejs-repl nameless mwim mvn multi-line meghanada maven-test-mode markdown-toc macrostep lsp-haskell lorem-ipsum livid-mode live-py-mode link-hint json-reformat json-navigator json-mode js2-refactor js-doc ivy-yasnippet ivy-xref ivy-rtags ivy-purpose ivy-hydra ivy-bibtex ivy-avy inspector info+ indent-guide importmagic impatient-mode hybrid-mode hungry-delete holy-mode hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation highlight-indent-guides hide-comnt helm-make haskell-snippets groovy-mode groovy-imports google-translate google-c-style golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link gh-md gendoxy flyspell-correct-ivy flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-haskell flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-tex evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr emmet-mode elisp-slime-nav elisp-demos elisp-def ein editorconfig dumb-jump drag-stuff dotenv-mode doom-themes disaster disable-mouse dired-quick-sort diminish diff-hl devdocs define-word dante cython-mode csv-mode cpp-auto-include counsel-projectile counsel-css company-ycmd company-web company-rtags company-reftex company-quickhelp company-math company-cabal company-c-headers company-auctex company-anaconda column-enforce-mode code-review code-cells cmm-mode clean-aindent-mode centered-cursor-mode browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile attrap all-the-icons aggressive-indent ace-link)))
+     '(ace-link add-node-modules-path aggressive-indent all-the-icons attrap
+                auto-compile auto-dictionary auto-highlight-symbol auto-yasnippet
+                blacken browse-at-remote bui centered-cursor-mode
+                clean-aindent-mode cmm-mode code-cells code-review
+                column-enforce-mode company-anaconda company-auctex
+                company-c-headers company-cabal company-math company-quickhelp
+                company-reftex company-rtags company-web company-ycmd compat
+                counsel-css counsel-projectile cpp-auto-include csv-mode
+                cython-mode dante dap-mode define-word devdocs diff-hl diminish
+                dired-quick-sort disable-mouse disaster doom-themes dotenv-mode
+                drag-stuff dumb-jump editorconfig ein elisp-def elisp-demos
+                elisp-slime-nav emmet-mode emr eval-sexp-fu evil-anzu evil-args
+                evil-cleverparens evil-collection evil-escape evil-evilified-state
+                evil-exchange evil-goggles evil-iedit-state evil-indent-plus
+                evil-lion evil-lisp-state evil-matchit evil-mc evil-nerd-commenter
+                evil-numbers evil-org evil-surround evil-tex evil-textobj-line
+                evil-tutor evil-unimpaired evil-visual-mark-mode evil-visualstar
+                expand-region eyebrowse fancy-battery flx-ido flycheck-elsa
+                flycheck-haskell flycheck-package flycheck-pos-tip flycheck-rtags
+                flycheck-ycmd flyspell-correct-ivy gendoxy ggtags gh-md git-link
+                git-messenger git-modes git-timemachine gitignore-templates
+                gnuplot golden-ratio google-c-style google-translate grizzl
+                groovy-imports groovy-mode haml-mode haskell-snippets helm
+                helm-core helm-css-scss helm-make hide-comnt
+                highlight-indent-guides highlight-indentation highlight-numbers
+                highlight-parentheses hindent hl-todo hlint-refactor holy-mode
+                hungry-delete hybrid-mode impatient-mode import-js importmagic
+                indent-guide info+ inspector ivy-avy ivy-bibtex ivy-hydra
+                ivy-purpose ivy-rtags ivy-xref ivy-yasnippet js-doc js2-mode
+                js2-refactor json-mode json-navigator json-reformat link-hint
+                live-py-mode livid-mode lorem-ipsum lsp-docker lsp-haskell
+                lsp-mode lsp-treemacs macrostep markdown-toc maven-test-mode
+                meghanada multi-line multiple-cursors mvn mwim nameless
+                nodejs-repl npm-mode open-junk-file org-cliplink org-contrib
+                org-download org-mime org-pomodoro org-present org-projectile
+                org-ref org-rich-yank org-superstar orgit-forge overseer paradox
+                password-generator pcre2el pip-requirements pipenv pippel poetry
+                popwin prettier-js pug-mode py-isort pydoc pyenv-mode pylookup
+                pytest quickrun rainbow-delimiters restart-emacs sass-mode
+                scss-mode simple-httpd skewer-mode slim-mode smeargle smex
+                space-doc spaceline spacemacs-purpose-popwin
+                spacemacs-whitespace-cleanup sphinx-doc sql-indent
+                string-edit-at-point symbol-overlay symon tagedit term-cursor tern
+                toc-org treemacs-icons-dired treemacs-magit treemacs-persp
+                treemacs-projectile typescript-mode undo-fu undo-fu-session unfill
+                vi-tilde-fringe vim-powerline volatile-highlights vundo
+                web-beautify web-completion-data web-mode wfnames wgrep which-key
+                winum writeroom-mode ws-butler yaml-mode yapfify
+                yasnippet-snippets)))
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
